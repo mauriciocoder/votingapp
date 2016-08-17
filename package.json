@@ -1,0 +1,24 @@
+{
+  "name": "votingapp",
+  "version": "1.0.0",
+  "description": "Build a Voting App",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "author": "Bonetti, Mauricio",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.15.2",
+    "connect-flash": "^0.1.1",
+    "express": "^4.14.0",
+    "express-session": "^1.14.0",
+    "mongodb": "^2.2.6",
+    "mongoose": "^4.5.9",
+    "mustache-express": "^1.2.2",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0"
+  }
+}
