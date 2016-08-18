@@ -3,7 +3,7 @@ var router = express.Router();
 module.exports = function(passport) {
     /* Handle login POST */
     router.post("/", passport.authenticate('login', {
-        successRedirect: '/works',
+        successRedirect: '/',
         failureRedirect: '/login',
         failureFlash : true  
     }));
