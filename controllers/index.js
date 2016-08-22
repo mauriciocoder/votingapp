@@ -2,17 +2,19 @@ var express = require("express");
 var router = express.Router();
 module.exports = function(passport) {
     router.get("/", function(req, res) {
-        res.render("polls", { user: req.user, authenticated: req.isAuthenticated() });
+        console.log("Chegou na raiz!");
+        res.redirect("/polls");
     });
-    
-    router.use("/login", require("./login")(passport));
-    router.use("/register", require("./register")(passport));
-    
+
     /* Handle Logout */
 	router.get("/logout", function(req, res) {
 		req.logout();
-		res.redirect('/');
+		res.redirect("/");
 	});
-    
+
+    router.use("/login", require("./login")(passport));
+    router.use("/register", require("./register")(passport));
+    router.use("/polls", require("./polls")());
+
     return router;
 }

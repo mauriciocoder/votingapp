@@ -36,6 +36,9 @@
 				        <!-- Greetings -->
                 <ul class="nav navbar-nav" style="float:left">
                     <li>
+                      <a href="/">Home</a>
+                    </li>
+                    <li>
                         {{#authenticated}}<div class="greetings">Hello, {{user.username}}!</div>{{/authenticated}}
                     </li>
                 </ul>
@@ -54,6 +57,7 @@
         <div class="row">
             <div class="col-lg-12 text-center">
                 <h1>Voting Online</h1>
+                {{#authenticated}}
                 <p class="lead">Your polls</p>
                 <table class="table table-sm">
                 	<thead>
@@ -62,17 +66,14 @@
                 		</tr>
                 	</thead>
                 	<tbody>
+                		{{#userPolls}}
                 		<tr>
-                		  <td class="pointer">Qual é a sua cor preferida?!</td>
+                		  <td class="pointer">{{question}}</td>
                 		</tr>
-                		<tr>
-                		  <td class="pointer">Qual é a sua cor preferida2?!</td>
-                		</tr>
-                		<tr>
-                		  <td>Qual é a sua cor preferida3?!</td>
-                		</tr>
+                		{{/userPolls}}
                 	</tbody>
-                </table>	
+                </table>
+                {{/authenticated}}
             </div>
         </div>
         <div class="row">
@@ -85,15 +86,11 @@
         				</tr>
         			</thead>
         			<tbody>
-        				<tr>
-        				  <td class="pointer">Qual é a sua cor preferida?!</td>
-        				</tr>
-        				<tr>
-        				  <td class="pointer">Qual é a sua cor preferida2?!</td>
-        				</tr>
-        				<tr>
-        				  <td>Qual é a sua cor preferida3?!</td>
-        				</tr>
+        				{{#allPolls}}
+                		<tr>
+                		  <td class="pointer">{{question}}</td>
+                		</tr>
+                		{{/allPolls}}
         			</tbody>
         		</table>
         		<!-- Footer -->
