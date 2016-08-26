@@ -14,10 +14,6 @@
     body {
         padding-top: 70px;
     }
-    
-    a, u {
-        text-decoration: none !important;
-    }
 	
 	.greetings {
 		color: white;
@@ -61,51 +57,74 @@
         <div class="row">
             <div class="col-lg-12 text-center">
                 <h1>Voting Online</h1>
-                {{#authenticated}}
-                <p class="lead">Your polls</p>
                 <table class="table table-sm">
-                	<thead>
-                		<tr>
-                			<th></th>
-                		</tr>
-                	</thead>
                 	<tbody>
-                		{{#userPolls}}
                 		<tr>
-                		  <td class="pointer"><a href="/poll/{{id}}">{{question}}</a></td>
+                		  {{#poll}}
+                		  <td>{{question}}</td>
+                		  {{/poll}}
                 		</tr>
-                		{{/userPolls}}
+                		{{#message}}
+                		<tr>
+                		  <td><span style="color:red">{{message}}</span></td>
+                		</tr>
+                		{{/message}}
+						<form action="/answer" method="post">
+						<input type="hidden" name="pollId" value="{{#poll}}{{id}}{{/poll}}">
+						<input type="hidden" name="answers" value="{{#poll}}{{answers}}{{/poll}}">
+						<tr>
+						  <td>Answer: 
+							<input type="text" name="answer" list="answers" />
+							<datalist id="answers">
+							  {{#poll}}
+							  {{#answers}}
+							  	<option>{{.}}</option>
+							  {{/answers}}
+							  {{/poll}}
+							</datalist>
+						  </td>
+						</tr>
+						<tr>
+						  <td>
+							<button class="btn btn-default">Submit</button>
+						</form>
+							<button class="btn btn-danger" style="float:right">Delete</button>
+						  </td>
+						</tr>
+						<tr>
+						  <td><div id="piechart"></div></td>
+						</tr>
+						<tr>
+						  <td>
+							<a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=https://simplesharebuttons.com" target="_blank">
+								<img src="https://simplesharebuttons.com/images/somacro/linkedin.png" alt="LinkedIn" width="40px"/>
+							</a>
+						  </td>
+						</tr>
                 	</tbody>
                 </table>
-                {{/authenticated}}
             </div>
         </div>
-        <div class="row">
-          <div class="col-lg-12 text-center">
-                    <p class="lead">All polls</p>
-        		<table class="table table-sm">
-        			<thead>
-        				<tr>
-        					<th></th>
-        				</tr>
-        			</thead>
-        			<tbody>
-        				{{#allPolls}}
-                		<tr>
-                		  <td class="pointer"><a href="/poll/{{id}}">{{question}}</a></td>
-                		</tr>
-                		{{/allPolls}}
-        			</tbody>
-        		</table>
-        		<!-- Footer -->
-            <ul class="list-unstyled">
-                <li>© 2016 Mauricio Bonetti</li>
-            </ul>
-          </div>
-        </div>
     </div>
-    	<!-- script references -->
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>		
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<script type="text/javascript">
+		google.charts.load('current', {'packages':['corechart']});
+		google.charts.setOnLoadCallback(drawChart);
+		function drawChart() {
+			var data = google.visualization.arrayToDataTable([
+			['Task', 'Hours per Day'],
+			['Work', 11],
+			['Eat', 2],
+			['Commute', 2],
+			['Watch TV', 2],
+			['Sleep', 7]
+			]);
+			var options = {};
+			var chart = new google.visualization.PieChart(document.getElementById("piechart"));
+			chart.draw(data, options);
+		}
+	</script>	
 </body>
 </html>

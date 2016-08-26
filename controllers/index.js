@@ -15,6 +15,7 @@ module.exports = function(passport) {
     router.use("/login", require("./login")(passport));
     router.use("/register", require("./register")(passport));
     router.use("/polls", require("./polls")());
-
+    router.use("/poll", require("./poll")());
+    router.use("/answer", require("./answer")());
     return router;
 }
