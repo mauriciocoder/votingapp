@@ -5,14 +5,15 @@ var Answer = require("../models/answer");
 module.exports = function() {
     /* Handle answer POST */
     router.post("/", function(req, res) {
+        var possibleAnswers = req.body.answers.split(",");
+        var userAnswer = req.body.answer;
+        var _answerExists = answerExists(userAnswer, possibleAnswers);
         if (!req.isAuthenticated()) {
-            var possibleAnswers = req.body.answers.split(",");
-            var userAnswer = req.body.answer;
             var pollId = req.body.pollId;
-            var isAnswerValid = checkUserAnswer(userAnswer, possibleAnswers);
-            if (!isAnswerValid) {
+            if (!_answerExists) {
                 req.flash("message", "You must be logged in to create a new answer");
                 res.redirect("/poll/" + pollId);
+                return;
             }
         }
         saveAnswerAndRedirect(req, res);
@@ -24,21 +25,29 @@ function saveAnswerAndRedirect(req, res) {
     var answer = new Answer();
     answer.pollId = req.body.pollId;
     answer.value = req.body.answer;
-    answer.user = "?";
-    answer.save(function(err) {
-        if (err) {
-            console.log("Error saving answer " + err);
-            throw err;
+    var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    answer.user = req.isAuthenticated() ? req.user._id : ip;
+    Answer.findOne({user: answer.user, pollId: answer.pollId}, function(err, _answer) {
+        if (_answer) {
+            req.flash("message", "User has already answered");
+            res.redirect("/poll/" + answer.pollId);
+        } else {
+            answer.save(function(err) {
+                if (err) {
+                    console.log("Error saving answer " + err);
+                    throw err;
+                }
+                req.flash("message", "Answer registered with success!");
+                res.redirect("/poll/" + answer.pollId);
+            });
         }
-        req.flash("message", "Answer registered with success!");
-        res.redirect("/poll/" + answer.pollId);
     });
 }
 
-function checkUserAnswer(userAnswer, possibleAnswers) {
-    var answerExists = false;
+function answerExists(userAnswer, possibleAnswers) {
+    var _answerExists = false;
     for (var i = 0; i < possibleAnswers.length; i++) {
-        answerExists |= (userAnswer === possibleAnswers[i]);
+        _answerExists |= (userAnswer === possibleAnswers[i]);
     }
-    return answerExists;
+    return _answerExists;
 }

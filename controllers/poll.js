@@ -15,6 +15,7 @@ function handlePollView(req, res, err, poll) {
     console.log("poll = " + poll);
     var resContent = { user: req.user, authenticated: req.isAuthenticated() };
     resContent.poll = poll;
+    resContent.shareUrl = req.protocol + '://' + req.get("host") + req.originalUrl;
     resContent.message = req.flash("message");
     res.render("poll", resContent);
 }
