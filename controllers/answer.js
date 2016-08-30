@@ -37,6 +37,7 @@ function saveAnswerAndRedirect(req, res) {
                     console.log("Error saving answer " + err);
                     throw err;
                 }
+                // TODO: Save if it is a new answer
                 req.flash("message", "Answer registered with success!");
                 res.redirect("/poll/" + answer.pollId);
             });
