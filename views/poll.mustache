@@ -88,7 +88,9 @@
 						  <td>
 							<button class="btn btn-default">Submit</button>
 						</form>
-							<button class="btn btn-danger" style="float:right">Delete</button>
+							{{#isAuthor}}
+							<form action="/poll/delete" method="post"><input type="hidden" name="pollId" value="{{#poll}}{{id}}{{/poll}}"/><button class="btn btn-danger" style="float:right">Delete</button></form action="/poll/delete" method="post">
+						  	{{/isAuthor}}
 						  </td>
 						</tr>
 						<tr>

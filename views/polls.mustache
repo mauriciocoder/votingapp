@@ -61,6 +61,7 @@
         <div class="row">
             <div class="col-lg-12 text-center">
                 <h1>Voting Online</h1>
+                {{#message}}<span style="color:red">{{message}}</span>{{/message}}
                 {{#authenticated}}
                 <p class="lead">Your polls</p>
                 <table class="table table-sm">
@@ -82,8 +83,8 @@
         </div>
         <div class="row">
           <div class="col-lg-12 text-center">
-                    <p class="lead">All polls</p>
-        		<table class="table table-sm">
+                <p class="lead">All polls</p>
+                <table class="table table-sm">
         			<thead>
         				<tr>
         					<th></th>

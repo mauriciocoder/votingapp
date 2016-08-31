@@ -28,5 +28,6 @@ function handlePollsView(req, res, err, polls) {
     }
     resContent.userPolls = userPolls;
     resContent.allPolls = allPolls;
+    resContent.message = req.flash("message");
     res.render("polls", resContent);
 }
