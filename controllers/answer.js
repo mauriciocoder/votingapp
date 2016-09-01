@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var Answer = require("../models/answer");
+var Poll = require("../models/poll");
 
 module.exports = function() {
     /* Handle answer POST */
@@ -8,20 +9,22 @@ module.exports = function() {
         var possibleAnswers = req.body.answers.split(",");
         var userAnswer = req.body.answer;
         var _answerExists = answerExists(userAnswer, possibleAnswers);
-        if (!req.isAuthenticated()) {
-            var pollId = req.body.pollId;
-            if (!_answerExists) {
+        if (!_answerExists) {
+            if (req.isAuthenticated()) {
+                possibleAnswers.push(userAnswer);
+            } else {
                 req.flash("message", "You must be logged in to create a new answer");
+                var pollId = req.body.pollId;
                 res.redirect("/poll/" + pollId);
                 return;
             }
         }
-        saveAnswerAndRedirect(req, res);
+        saveAnswerAndRedirect(req, res, possibleAnswers);
     });
     return router;
 };
 
-function saveAnswerAndRedirect(req, res) {
+function saveAnswerAndRedirect(req, res, possibleAnswers) {
     var answer = new Answer();
     answer.pollId = req.body.pollId;
     answer.value = req.body.answer;
@@ -37,9 +40,12 @@ function saveAnswerAndRedirect(req, res) {
                     console.log("Error saving answer " + err);
                     throw err;
                 }
-                // TODO: Save if it is a new answer
-                req.flash("message", "Answer registered with success!");
-                res.redirect("/poll/" + answer.pollId);
+                Poll.findOneAndUpdate({ _id: answer.pollId}, { $set: { answers: possibleAnswers }}, function(err, doc) {
+                    console.log("Chegou aki");
+                    console.log("Doc = " + JSON.stringify(doc));
+                    req.flash("message", "Answer registered with success!");
+                    res.redirect("/poll/" + answer.pollId);
+                });
             });
         }
     });

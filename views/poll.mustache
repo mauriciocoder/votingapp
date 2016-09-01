@@ -86,16 +86,17 @@
 						</tr>
 						<tr>
 						  <td>
-							<button class="btn btn-default">Submit</button>
+							<button class="btn btn-primary">Submit</button>
 						</form>
 							{{#isAuthor}}
-							<form action="/poll/delete" method="post"><input type="hidden" name="pollId" value="{{#poll}}{{id}}{{/poll}}"/><button class="btn btn-danger" style="float:right">Delete</button></form action="/poll/delete" method="post">
+							<form action="/poll/delete" method="post" style="display:inline"><input type="hidden" name="pollId" value="{{#poll}}{{id}}{{/poll}}"/><button class="btn btn-danger" style="float:right">Delete</button></form action="/poll/delete" method="post">
 						  	{{/isAuthor}}
 						  </td>
 						</tr>
 						<tr>
 						  <td><div id="piechart"></div></td>
 						</tr>
+						{{#isAuthor}}
 						<tr>
 						  <td>
 							<a href="http://www.linkedin.com/shareArticle?mini=true&amp;url={{shareUrl}}" target="_blank">
@@ -103,6 +104,7 @@
 							</a>
 						  </td>
 						</tr>
+						{{/isAuthor}}
                 	</tbody>
                 </table>
             </div>
