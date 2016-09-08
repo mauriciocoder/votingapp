@@ -35,7 +35,7 @@ app.use(express.static('public'));
 //app.use(require('./middlewares/users'))
 app.use(require("./controllers")(passport));
 
-var port = process.env.port || 8080;
+var port = process.env.PORT || 8080;
 app.listen(port, function() {
     console.log("dbUrl = " + dbUrl);
     console.log("VotingApp Listening on port " + port);
