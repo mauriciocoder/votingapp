@@ -14,6 +14,34 @@ module.exports = function() {
         });
     });
     
+    /* Handle new poll GET */
+    router.get("/new", function(req, res) {
+        var resContent = { user: req.user, authenticated: req.isAuthenticated() };
+        res.render("pollnew", resContent);
+    });
+    
+    /* Handle new poll POST */
+    router.post("/new", function(req, res) {
+        var author = req.user._id;
+        var question = req.body.question;
+        var answers = req.body.answers;
+        console.log("author = " + author);
+        console.log("question = " + question);
+        console.log("answers = " + answers);
+        var poll = new Poll();
+        poll.author = author;
+        poll.question = question;
+        poll.answers = answers.split("|");
+        poll.save(function(err) {
+            if (err) {
+                throw err;
+            } else {
+                req.flash("message", "Poll created with success!");
+                res.redirect("/polls");
+            }
+        });
+    });
+    
     /* Handle poll GET */
     router.get("/:ID", function(req, res) {
         var pollId = req.params.ID;

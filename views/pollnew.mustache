@@ -9,6 +9,9 @@
     <title>Voting App</title>
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/css/jquery.tagsinput.css"/>
+    <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/themes/start/jquery-ui.css" />
+    
     <!-- Custom CSS -->
     <style>
     body {
@@ -57,54 +60,31 @@
         <div class="row">
             <div class="col-lg-12 text-center">
                 <h1>Voting Online</h1>
+                <p>New Poll</p>
                 <table class="table table-sm">
                 	<tbody>
-                		<tr>
-                		  {{#poll}}
-                		  <td>{{question}}</td>
-                		  {{/poll}}
-                		</tr>
                 		{{#message}}
                 		<tr>
                 		  <td><span style="color:red">{{message}}</span></td>
                 		</tr>
                 		{{/message}}
-						<form action="/answer" method="post">
-						<input type="hidden" name="pollId" value="{{#poll}}{{id}}{{/poll}}">
-						<input type="hidden" name="answers" value="{{#poll}}{{answers}}{{/poll}}">
+						<form action="/poll/new" method="post" style="display:inline">
 						<tr>
-						  <td>Answer: 
-							<input type="text" name="answer" list="answers" />
-							<datalist id="answers">
-							  {{#poll}}
-							  {{#answers}}
-							  	<option>{{.}}</option>
-							  {{/answers}}
-							  {{/poll}}
-							</datalist>
+						  <td>Question: 
+							<input type="text" name="question"/>
+						  </td>
+						</tr>
+						<tr>
+						  <td><div>Answers:</div>
+							<input name="answers" id="answers" value="" />
 						  </td>
 						</tr>
 						<tr>
 						  <td>
-							<button class="btn btn-primary">Submit</button>
+							<button id="btnSubmit" class="btn btn-primary">Submit</button>
+						  </td>
+						</tr>
 						</form>
-							{{#isAuthor}}
-							<form action="/poll/delete" method="post" style="display:inline"><input type="hidden" name="pollId" value="{{#poll}}{{id}}{{/poll}}"/><button class="btn btn-danger" style="float:right">Delete</button></form action="/poll/delete" method="post">
-						  	{{/isAuthor}}
-						  </td>
-						</tr>
-						<tr>
-						  <td><div id="piechart"></div></td>
-						</tr>
-						{{#isAuthor}}
-						<tr>
-						  <td>
-							<a href="http://www.linkedin.com/shareArticle?mini=true&amp;url={{shareUrl}}" target="_blank">
-								<img src="https://simplesharebuttons.com/images/somacro/linkedin.png" alt="LinkedIn" width="30px"/>
-							</a>
-						  </td>
-						</tr>
-						{{/isAuthor}}
                 	</tbody>
                 </table>
                 <!-- Footer -->
@@ -114,19 +94,27 @@
             </div>
         </div>
     </div>
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>		
-	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-	<script type="text/javascript">
-		google.charts.load('current', {'packages':['corechart']});
-		google.charts.setOnLoadCallback(drawChart);
-		function drawChart() {
-			//var data = google.visualization.arrayToDataTable([["Answer", "Total"],["sasa",1],["adaba",1],["Messi",1],["Eu",1],["asasa",1],["Ronaldo",4],["Neymar",2]]);
-			var data = google.visualization.arrayToDataTable({{{answerStats}}});
-			var options = {};
-			var chart = new google.visualization.PieChart(document.getElementById("piechart"));
-			chart.draw(data, options);
-		}
-	</script>	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+	<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js'></script>
+    <script src="/js/jquery.tagsinput.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+    		$(function() {
+		$('#answers').tagsInput();
+		$("#btnSubmit").mousedown(function() {
+			var answers = "";
+			var answersElement = $("#answers_tagsinput").find(".tag");
+			var answersLength = answersElement.length;
+			answersElement.each(function(index) {
+				answers += $(this).find("span").text().slice(0, -2);
+				if (index != answersLength - 1) {
+					answers += "|";
+				}
+			});
+			$("#answers").val(answers);
+			//alert($("#answers").val());
+		});	
+	});
+    </script>
 </body>
 </html>

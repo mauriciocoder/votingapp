@@ -64,6 +64,7 @@
                 {{#message}}<span style="color:red">{{message}}</span>{{/message}}
                 {{#authenticated}}
                 <p class="lead">Your polls</p>
+                <div><form action="/poll/new" method="get"><button class="btn btn-primary" style="float:right">New</button></form></div>
                 <table class="table table-sm">
                 	<thead>
                 		<tr>
@@ -99,9 +100,9 @@
         			</tbody>
         		</table>
         		<!-- Footer -->
-            <ul class="list-unstyled">
-                <li>© 2016 Mauricio Bonetti</li>
-            </ul>
+                <ul class="list-unstyled">
+                    <li>© 2016 Mauricio Bonetti</li>
+                </ul>
           </div>
         </div>
     </div>
